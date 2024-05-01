@@ -81,7 +81,6 @@ PHP_BINARY=$(sudo incus exec tonics-cms -- which php8.2)
 
 # Setting Up SystemD Services
 sudo incus exec tonics-cms -- bash -c "sed -e 's#/path/to/tonics/web#/var/www/tonics/web#g' -e 's#/usr/bin/php8.1#$PHP_BINARY#g' </var/www/tonics/web/bin/systemd/service_name.service > /etc/systemd/system/tonics.service"
-sudo incus exec tonics-cms -- bash -c "cat /etc/systemd/system/tonics.service"
 sudo incus exec tonics-cms -- bash -c "sed -e 's#service_name.service#tonics.service#g' </var/www/tonics/web/bin/systemd/service_name-watcher.service > /etc/systemd/system/tonics-watcher.service"
 sudo incus exec tonics-cms -- bash -c "sed -e 's#/path/to/tonics/web/bin#/var/www/tonics/web/bin#g' </var/www/tonics/web/bin/systemd/service_name-watcher.path > /etc/systemd/system/tonics-watcher.path"
 
@@ -102,7 +101,7 @@ sudo incus exec tonics-cms -- bash -c 'chmod 660 /var/www/tonics/web/.env'
 # Allow Tonics To Manage private uploads
 sudo incus exec tonics-cms -- bash -c 'find /var/www/tonics/private -type d -exec chmod 755 {} \; && find /var/www/tonics/private -type f -exec chmod 664 {} \;'
 # Allow Tonics To Manage public contents
-sudo incus exec tonics-cms -- bash -c 'find /var/www/tonics/public -type d -exec chmod 755 {} \; && find /var/www/tonics/public -type f -exec chmod 664 {} \;'
+sudo incus exec tonics-cms -- bash -c 'find /var/www/tonics/web/public -type d -exec chmod 755 {} \; && find /var/www/tonics/web/public -type f -exec chmod 664 {} \;'
 
 Version="MariaDB__$(sudo incus exec tonics-cms -- mysql -V | awk '{print $5}' | sed 's/,//')__Nginx__$(sudo incus exec tonics-cms -- nginx -v |& sed 's/nginx version: nginx\///')__PHP__$(sudo incus exec tonics-cms -- php -v | head -n 1 | awk '{print $2}' | cut -d '-' -f 1)__$1__$TonicsVersion"
 
