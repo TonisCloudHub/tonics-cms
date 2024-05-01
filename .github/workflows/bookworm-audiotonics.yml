@@ -1,0 +1,48 @@
+name: Incus AudioTonics (BookWorm) Image Build
+on:
+  push: 
+    paths:
+    - '.github/workflows/bookworm.yml'
+  schedule:
+  - cron: '0 0 * * *' # Once EveryDay
+
+jobs:
+  build:
+    runs-on: ubuntu-latest 
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bdx0/action-incus@v1  
+       
+      - name: Install Tonics
+        run: |
+          bash .github/bookworm/scripts/script.sh AudioTonics
+
+      - name: Extract Tag Name
+        id: extract_filename
+        run: |
+          FILENAME=$(basename images/*.tar.gz .tar.gz)
+          echo "filename=$FILENAME" >> $GITHUB_OUTPUT
+
+      - name: Check if tag exists
+        id: tag_exists
+        run: |
+          TAG_NAME="${{ steps.extract_filename.outputs.filename }}"
+          REPO_NAME="${{ github.repository }}"
+          if gh release view "$TAG_NAME" --repo "https://github.com/$REPO_NAME" &> /dev/null; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release
+        if: steps.tag_exists.outputs.exists == 'false'
+        run: |
+          TAG_NAME="${{ steps.extract_filename.outputs.filename }}"
+          REPO_NAME="${{ github.repository }}"
+          gh release create "$TAG_NAME" --repo "https://github.com/$REPO_NAME" images/* -F images/info.txt
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
