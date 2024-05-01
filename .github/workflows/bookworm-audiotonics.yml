@@ -2,7 +2,7 @@ name: Incus AudioTonics (BookWorm) Image Build
 on:
   push: 
     paths:
-    - '.github/workflows/bookworm-audiotonics.yml'
+    - '.github/workflows/bookworm-audiotonics.yml' 
   schedule:
   - cron: '0 0 * * *' # Once EveryDay
 
