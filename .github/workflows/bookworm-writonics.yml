@@ -1,8 +1,8 @@
-name: Incus AudioTonics (BookWorm) Image Build
+name: Incus WriTonics (BookWorm) Image Build
 on:
   push: 
     paths:
-    - '.github/workflows/bookworm-audiotonics.yml'  
+    - '.github/workflows/bookworm-writonics.yml'
   schedule:
   - cron: '0 0 * * *' # Once EveryDay
 
@@ -15,7 +15,7 @@ jobs:
        
       - name: Install Tonics
         run: |
-          bash .github/bookworm/scripts/script.sh AudioTonics
+          bash .github/bookworm/scripts/script.sh WriTonics
 
       - name: Extract Tag Name
         id: extract_filename
