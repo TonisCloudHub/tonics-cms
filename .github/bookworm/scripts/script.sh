@@ -77,10 +77,12 @@ sudo incus exec tonics-cms -- bash -c "unzip tonics.zip -d /var/www/tonics"
 # Copy Tonics .env-sample to .env
 sudo incus exec tonics-cms -- bash -c "cp -f '/var/www/tonics/web/.env-sample' '/var/www/tonics/web/.env'"
 
+PHP_BINARY=$(sudo incus exec tonics-cms -- which php8.2)
+
 # Setting Up SystemD Services
-sudo incus exec tonics-cms -- bash -c "sed -e 's#/path/to/tonics/web#/var/www/tonics/web#g' </var/www/tonics/bin/systemd/service_name.service > '/etc/systemd/system/tonics.service'"
-sudo incus exec tonics-cms -- bash -c "sed -e 's#service_name.service#tonics.service#g' </var/www/tonics/bin/systemd/service_name-watcher.service > '/etc/systemd/system/tonics-watcher.service'"
-sudo incus exec tonics-cms -- bash -c "sed -e 's#/path/to/tonics/web/bin#/var/www/tonics/web/bin#g' </var/www/tonics/bin/systemd/service_name-watcher.path > '/etc/systemd/system/tonics-watcher.path'"
+sudo incus exec tonics-cms -- bash -c "sed -e 's#/path/to/tonics/web#/var/www/tonics/web#g' -e 's#/usr/bin/php8.1#$PHP_BINARYb#g' </var/www/tonics/web/bin/systemd/service_name.service > '/etc/systemd/system/tonics.service'"
+sudo incus exec tonics-cms -- bash -c "sed -e 's#service_name.service#tonics.service#g' </var/www/tonics/web/bin/systemd/service_name-watcher.service > '/etc/systemd/system/tonics-watcher.service'"
+sudo incus exec tonics-cms -- bash -c "sed -e 's#/path/to/tonics/web/bin#/var/www/tonics/web/bin#g' </var/www/tonics/web/bin/systemd/service_name-watcher.path > '/etc/systemd/system/tonics-watcher.path'"
 
 # Enabling SystemD Services
 sudo incus exec tonics-cms -- bash -c "systemctl daemon-reload"
