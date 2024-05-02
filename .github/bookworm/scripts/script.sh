@@ -71,8 +71,9 @@ sudo incus exec tonics-cms -- bash -c "mkdir -p /var/www/tonics/"
 # Fetch Tonics, extract and install to the default web root.
 #
 sudo incus exec tonics-cms -- bash -c "wget '$zipURL' -O tonics.zip"
-sudo incus exec tonics-cms -- bash -c "rm -Rf /var/www/html/index.html /var/www/html/index.nginx-debian.html"
+sudo incus exec tonics-cms -- bash -c "rm -Rf /var/www/html"
 sudo incus exec tonics-cms -- bash -c "unzip tonics.zip -d /var/www/tonics"
+sudo incus exec tonics-cms -- bash -c "rm -r tonics.zip"
 
 # Copy Tonics .env-sample to .env
 sudo incus exec tonics-cms -- bash -c "cp -f '/var/www/tonics/web/.env-sample' '/var/www/tonics/web/.env'"
