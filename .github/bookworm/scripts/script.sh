@@ -105,7 +105,7 @@ sudo incus exec tonics-cms -- bash -c 'find /var/www/tonics/private -type d -exe
 # Allow Tonics To Manage public contents
 sudo incus exec tonics-cms -- bash -c 'find /var/www/tonics/web/public -type d -exec chmod 755 {} \; && find /var/www/tonics/web/public -type f -exec chmod 664 {} \;'
 
-Version="MariaDB__$(sudo incus exec tonics-cms -- mysql -V | awk '{print $5}' | sed 's/,//')__Nginx__$(sudo incus exec tonics-cms -- nginx -v |& sed 's/nginx version: nginx\///')__PHP__$(sudo incus exec tonics-cms -- php -v | head -n 1 | awk '{print $2}' | cut -d '-' -f 1)__$1__$TonicsVersion"
+Version="MariaDB__$(sudo incus exec tonics-cms --  mariadbd --version | awk '{print $3}' | sed 's/,//')__Nginx__$(sudo incus exec tonics-cms -- nginx -v |& sed 's/nginx version: nginx\///')__PHP__$(sudo incus exec tonics-cms -- php -v | head -n 1 | awk '{print $2}' | cut -d '-' -f 1)__$1__$TonicsVersion"
 
 # Publish Image
 mkdir images && sudo incus stop tonics-cms && sudo incus publish tonics-cms --alias tonics-cms
