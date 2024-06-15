@@ -25,6 +25,7 @@ release_url="https://api.github.com/repos/tonics-apps/tonics/releases/latest"
 
 # Keyword to search for in the zip file name
 keyword=$1
+mariaDBVersion=$2
 
 # Extracting the tag name and zip URL
 result=$(extract_tag_and_zip_url "$release_url" "$keyword")
@@ -38,9 +39,9 @@ sudo incus admin init --auto
 sudo incus launch images:debian/bookworm/amd64 tonics-cms
 
 # Dependencies
-sudo incus exec tonics-cms -- bash -c "apt update -y && apt upgrade -y"
-
-sudo incus exec tonics-cms -- bash -c "DEBIAN_FRONTEND=noninteractive apt install -y unzip mariadb-server nginx wget php php8.2-fpm php8.2-dom php8.2-xml php8.2-cli php8.2-soap php8.2-mysql php8.2-mbstring php8.2-readline php8.2-gd php8.2-zip php8.2-gmp php8.2-bcmath php8.2-zip php8.2-curl php8.2-intl php8.2-apcu"
+sudo incus exec tonics-cms -- bash -c "apt update -y && apt upgrade -y && apt install -y apt-transport-https curl"
+sudo incus exec tonics-cms -- bash -c "curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | sudo bash -s -- --mariadb-server-version=\"$mariaDBVersion\""
+sudo incus exec tonics-cms -- bash -c "DEBIAN_FRONTEND=noninteractive apt update -y &&  apt install -y unzip mariadb-server nginx wget php php8.2-fpm php8.2-dom php8.2-xml php8.2-cli php8.2-soap php8.2-mysql php8.2-mbstring php8.2-readline php8.2-gd php8.2-zip php8.2-gmp php8.2-bcmath php8.2-zip php8.2-curl php8.2-intl php8.2-apcu"
 
 # Setup MariaDB
 sudo incus exec tonics-cms -- bash -c "mysql --user=root -sf <<EOS

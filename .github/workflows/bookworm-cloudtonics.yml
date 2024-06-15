@@ -15,7 +15,7 @@ jobs:
        
       - name: Install Tonics
         run: |
-          bash .github/bookworm/scripts/script.sh CloudTonics
+          bash .github/bookworm/scripts/script.sh CloudTonics mariadb-10-11
 
       - name: Extract Tag Name
         id: extract_filename

@@ -15,7 +15,7 @@ jobs:
        
       - name: Install Tonics
         run: |
-          bash .github/bookworm/scripts/script.sh WriTonics
+          bash .github/bookworm/scripts/script.sh WriTonics mariadb-10-11
 
       - name: Extract Tag Name
         id: extract_filename
